@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MapDisplay</string>
+    <string name="searchButton">検索</string>
+</resources>

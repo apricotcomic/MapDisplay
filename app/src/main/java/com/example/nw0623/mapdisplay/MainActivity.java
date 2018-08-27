@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -105,18 +107,27 @@ public class MainActivity extends AppCompatActivity {
                             textView.setText(buff);
 
                             //フロア画像を取得
-                            //Drawable bmp = imageView.getDrawable();
+                            Bitmap bmp = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                             //ピン画像を取得
-                            Drawable pin = ResourcesCompat.getDrawable(getResources(),R.drawable.pin,null);
+                            Context context = MyApplication.getAppContext();
+                            Bitmap pin = BitmapFactory.decodeResource(context.getResources(),R.drawable.pin);
                             //ピンにGravity設定
-                            pin.setBounds(350,550,0,0);
+                            //pin.setBounds(addr_y,addr_x,0,0);
 
                             //LayerDrawableを生成
                             //Drawable[] layers = { bmp , pin };
                             //LayerDrawable layerDrawable = new LayerDrawable(layers);
                             //Viewにセットする
                             //imageView.setImageDrawable(layerDrawable);
-                            imageView.setImageDrawable(pin);
+
+                            int width = bmp.getWidth();
+                            int height = bmp.getHeight();
+                            Bitmap new_bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(new_bitmap);
+                            canvas.drawBitmap(bmp, 0, 0, (Paint)null); // image, x座標, y座標, Paintイタンス
+                            canvas.drawBitmap(pin, addr_y, addr_x, (Paint)null); // 画像合成
+
+                            imageView.setImageBitmap(new_bitmap);
 
                         }
                     });
@@ -148,4 +159,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
+
 }
